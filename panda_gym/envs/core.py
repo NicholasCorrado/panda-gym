@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import gymnasium as gym
 import numpy as np
-from gymnasium import spaces
+from gym import spaces
 from gymnasium.utils import seeding
 
 from panda_gym.pybullet import PyBullet
