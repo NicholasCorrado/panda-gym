@@ -210,41 +210,51 @@ class RobotTaskEnv(gym.Env):
         self.robot = robot
         self.task = task
         observation, _ = self.reset()  # required for init; seed can be changed later
-        observation_shape = observation["observation"].shape
-        achieved_goal_shape = observation["achieved_goal"].shape
-        desired_goal_shape = observation["achieved_goal"].shape
-        self.observation_space = spaces.Dict(
-            dict(
-                observation=spaces.Box(-10.0, 10.0, shape=observation_shape, dtype=np.float32),
-                desired_goal=spaces.Box(-10.0, 10.0, shape=achieved_goal_shape, dtype=np.float32),
-                achieved_goal=spaces.Box(-10.0, 10.0, shape=desired_goal_shape, dtype=np.float32),
-            )
-        )
+        # observation_shape = observation["observation"].shape
+        # achieved_goal_shape = observation["achieved_goal"].shape
+        # desired_goal_shape = observation["achieved_goal"].shape
+        # self.observation_space = spaces.Dict(
+        #     dict(
+        #         observation=spaces.Box(-10.0, 10.0, shape=observation_shape, dtype=np.float32),
+        #         desired_goal=spaces.Box(-10.0, 10.0, shape=achieved_goal_shape, dtype=np.float32),
+        #         achieved_goal=spaces.Box(-10.0, 10.0, shape=desired_goal_shape, dtype=np.float32),
+        #     )
+        # )
+        self.observation_space = spaces.Box(-10, 10, shape=observation.shape, dtype=np.float32)
+
         self.action_space = self.robot.action_space
         self.compute_reward = self.task.compute_reward
         self._saved_goal = dict()  # For state saving and restoring
 
-    def _get_obs(self) -> Dict[str, np.ndarray]:
+        task_obs = self.task.get_obs()
+        self.achieved_idx = np.array([6, 7, 8])
+        if task_obs.shape[0] == 0:
+            self.achieved_idx = np.array([0, 1, 2])
+
+    def _get_obs(self) -> np.ndarray:
         robot_obs = self.robot.get_obs().astype(np.float32)  # robot state
         task_obs = self.task.get_obs().astype(np.float32)  # object position, velococity, etc...
         observation = np.concatenate([robot_obs, task_obs])
         achieved_goal = self.task.get_achieved_goal().astype(np.float32)
-        return {
-            "observation": observation,
-            "achieved_goal": achieved_goal,
-            "desired_goal": self.task.get_goal().astype(np.float32),
-        }
+        # print(observation.shape)
+        return np.concatenate([observation, self.task.get_goal().astype(np.float32)])
+        # return {
+        #     "observation": observation,
+        #     "achieved_goal": achieved_goal,
+        #     "desired_goal": self.task.get_goal().astype(np.float32),
+        # }
 
     def reset(
         self, seed: Optional[int] = None, options: Optional[dict] = None
-    ) -> Tuple[Dict[str, np.ndarray], Dict[str, Any]]:
+    ) -> Tuple[np.ndarray, Dict[str, Any]]:
         super().reset(seed=seed, options=options)
         self.task.np_random, seed = seeding.np_random(seed)
         with self.sim.no_rendering():
             self.robot.reset()
             self.task.reset()
         observation = self._get_obs()
-        info = {"is_success": self.task.is_success(observation["achieved_goal"], self.task.get_goal())}
+        # info = {"is_success": self.task.is_success(observation["achieved_goal"], self.task.get_goal())}
+        info = {}
         return observation, info
 
     def save_state(self) -> int:
@@ -280,10 +290,10 @@ class RobotTaskEnv(gym.Env):
         self.sim.step()
         observation = self._get_obs()
         # An episode is terminated iff the agent has reached the target
-        terminated = bool(self.task.is_success(observation["achieved_goal"], self.task.get_goal()))
+        terminated = bool(self.task.is_success(observation[self.achieved_idx], self.task.get_goal()))
         truncated = False
         info = {"is_success": terminated}
-        reward = float(self.task.compute_reward(observation["achieved_goal"], self.task.get_goal(), info))
+        reward = float(self.task.compute_reward(observation[self.achieved_idx], self.task.get_goal(), info))
         return observation, reward, terminated, truncated, info
 
     def close(self) -> None:
