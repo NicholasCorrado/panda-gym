@@ -85,7 +85,7 @@ class PickAndPlace(Task):
         goal = np.tile(goal, (n, 1))
         noise = self.np_random.uniform(self.goal_range_low, self.goal_range_high, (n,3))
         if self.np_random.random() < 0.3:
-            noise[2] = 0.0
+            noise[:, 2] = 0.0
         goal += noise
         return goal
 
