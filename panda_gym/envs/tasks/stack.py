@@ -26,6 +26,8 @@ class Stack(Task):
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
+        self.achieved_idx = np.array([7,8,9,19,20,21])
+        self.goal_idx = np.array([32,33,34,35,36,37])
 
     def _create_scene(self) -> None:
         self.sim.create_plane(z_offset=-0.4)
@@ -71,6 +73,18 @@ class Stack(Task):
         object2_rotation = np.array(self.sim.get_base_rotation("object2"))
         object2_velocity = np.array(self.sim.get_base_velocity("object2"))
         object2_angular_velocity = np.array(self.sim.get_base_angular_velocity("object2"))
+        for i in             [
+                object1_position,
+                object1_rotation,
+                object1_velocity,
+                object1_angular_velocity,
+                object2_position,
+                object2_rotation,
+                object2_velocity,
+                object2_angular_velocity,
+            ]:
+            print(i.shape)
+
         observation = np.concatenate(
             [
                 object1_position,

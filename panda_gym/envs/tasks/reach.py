@@ -24,6 +24,8 @@ class Reach(Task):
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
+        self.achieved_idx = np.array([0,1,2])
+        self.goal_idx = np.array([6,7,8])
 
     def _create_scene(self) -> None:
         self.sim.create_plane(z_offset=-0.4)

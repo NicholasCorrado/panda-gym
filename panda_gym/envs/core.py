@@ -222,21 +222,20 @@ class RobotTaskEnv(gym.Env):
         # )
         self.observation_space = spaces.Box(-10, 10, shape=observation.shape, dtype=np.float32)
 
+        print(self.observation_space.shape)
         self.action_space = self.robot.action_space
         self.compute_reward = self.task.compute_reward
         self._saved_goal = dict()  # For state saving and restoring
 
-        task_obs = self.task.get_obs()
-        self.achieved_idx = np.array([6, 7, 8])
-        if task_obs.shape[0] == 0:
-            self.achieved_idx = np.array([0, 1, 2])
+        self.achieved_idx = task.achieved_idx
+        self.goal_idx = task.goal_idx
 
     def _get_obs(self) -> np.ndarray:
         robot_obs = self.robot.get_obs().astype(np.float32)  # robot state
         task_obs = self.task.get_obs().astype(np.float32)  # object position, velococity, etc...
         observation = np.concatenate([robot_obs, task_obs])
         achieved_goal = self.task.get_achieved_goal().astype(np.float32)
-        # print(observation.shape)
+        print(robot_obs.shape, task_obs.shape, achieved_goal.shape)
         return np.concatenate([observation, self.task.get_goal().astype(np.float32)])
         # return {
         #     "observation": observation,
