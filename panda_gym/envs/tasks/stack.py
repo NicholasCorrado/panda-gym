@@ -73,17 +73,6 @@ class Stack(Task):
         object2_rotation = np.array(self.sim.get_base_rotation("object2"))
         object2_velocity = np.array(self.sim.get_base_velocity("object2"))
         object2_angular_velocity = np.array(self.sim.get_base_angular_velocity("object2"))
-        for i in             [
-                object1_position,
-                object1_rotation,
-                object1_velocity,
-                object1_angular_velocity,
-                object2_position,
-                object2_rotation,
-                object2_velocity,
-                object2_angular_velocity,
-            ]:
-            print(i.shape)
 
         observation = np.concatenate(
             [
