@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import gymnasium as gym
 import numpy as np
+import pybullet
 from gym import spaces
 from gymnasium.utils import seeding
 
@@ -30,6 +31,8 @@ class PyBulletRobot(ABC):
         joint_forces: np.ndarray,
     ) -> None:
         self.sim = sim
+        pybullet.setPhysicsEngineParameter(constraintSolverType=pybullet.CONSTRAINT_SOLVER_LCP_DANTZIG,
+                                    globalCFM=0.000001)
         self.body_name = body_name
         with self.sim.no_rendering():
             self._load_robot(file_name, base_position)
