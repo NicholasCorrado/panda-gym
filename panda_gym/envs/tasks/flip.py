@@ -25,7 +25,7 @@ class Flip(Task):
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
-        self.achieved_idx = np.array([3,4,5,6])
+        self.achieved_idx = np.array([11,12,13,14])
         self.goal_idx = np.array([20,21,22,23])
 
 
