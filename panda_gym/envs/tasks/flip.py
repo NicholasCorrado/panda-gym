@@ -74,6 +74,11 @@ class Flip(Task):
         goal = R.random().as_quat()
         return goal
 
+    def _sample_n_goals(self, n) -> np.ndarray:
+        """Randomize goal."""
+        goal = R.random(num=n).as_quat()
+        return goal
+
     def _sample_object(self) -> Tuple[np.ndarray, np.ndarray]:
         """Randomize start position of object."""
         object_position = np.array([0.0, 0.0, self.object_size / 2])
