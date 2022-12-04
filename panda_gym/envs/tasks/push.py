@@ -81,6 +81,14 @@ class Push(Task):
         goal += noise
         return goal
 
+    def _sample_n_goals(self, n) -> np.ndarray:
+        """Randomize goal."""
+        goal = np.array([0.0, 0.0, self.object_size / 2])  # z offset for the cube center
+        goal = np.tile(goal, (n, 1))
+        noise = self.np_random.uniform(self.goal_range_low, self.goal_range_high, (n, 3))
+        goal += noise
+        return goal
+
     def _sample_object(self) -> np.ndarray:
         """Randomize start position of object."""
         object_position = np.array([0.0, 0.0, self.object_size / 2])

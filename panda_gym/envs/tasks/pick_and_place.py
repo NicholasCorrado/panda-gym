@@ -29,7 +29,7 @@ class PickAndPlace(Task):
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
         self.achieved_idx = np.array([6, 7, 8])
-        self.goal_idx = np.array([18,19,20, 21])
+        self.goal_idx = np.array([19,20, 21])
 
     def _create_scene(self) -> None:
         """Create the scene."""

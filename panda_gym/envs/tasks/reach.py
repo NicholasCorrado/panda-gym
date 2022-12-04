@@ -55,6 +55,11 @@ class Reach(Task):
         goal = self.np_random.uniform(self.goal_range_low, self.goal_range_high)
         return goal
 
+    def _sample_n_goals(self, n) -> np.ndarray:
+        """Randomize goal."""
+        goal = self.np_random.uniform(self.goal_range_low, self.goal_range_high, size=(n,3))
+        return goal
+
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:
         d = distance(achieved_goal, desired_goal)
         return np.array(d < self.distance_threshold, dtype=np.bool8)
