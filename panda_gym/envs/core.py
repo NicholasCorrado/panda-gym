@@ -230,8 +230,9 @@ class RobotTaskEnv(gym.Env):
         self.compute_reward = self.task.compute_reward
         self._saved_goal = dict()  # For state saving and restoring
 
-        self.achieved_idx = task.achieved_idx
-        self.goal_idx = task.goal_idx
+        self.achieved_idx = task.achieved_mask
+        self.goal_idx = task.goal_mask
+        self.obj_idx = task.obj_mask
 
     def _get_obs(self) -> np.ndarray:
         robot_obs = self.robot.get_obs().astype(np.float32)  # robot state
