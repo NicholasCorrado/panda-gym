@@ -25,11 +25,11 @@ class Flip(Task):
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
-        self.achieved_idx = np.array([11,12,13,14])
-        self.goal_idx = np.array([20,21,22,23])
-        self.achieved_mask = np.zeros(21, dtype=bool)
-        self.goal_mask = np.zeros(21, dtype=bool)
-        self.obj_mask = np.zeros(21, dtype=bool)
+        # self.achieved_idx = np.array([11,12,13,14])
+        # self.goal_idx = np.array([20,21,22,23])
+        self.achieved_mask = np.zeros(24, dtype=bool)
+        self.goal_mask = np.zeros(24, dtype=bool)
+        self.obj_mask = np.zeros(24, dtype=bool)
 
         self.achieved_mask[11:14+1] = True
         self.goal_mask[-4:] = True
@@ -63,6 +63,7 @@ class Flip(Task):
         object_rotation = self.sim.get_base_rotation("object", "quaternion")
         object_velocity = self.sim.get_base_velocity("object")
         object_angular_velocity = self.sim.get_base_angular_velocity("object")
+        # print(object_position.shape, object_rotation.shape, object_velocity.shape, object_angular_velocity.shape)
         observation = np.concatenate([object_position, object_rotation, object_velocity, object_angular_velocity])
         return observation
 
