@@ -95,6 +95,13 @@ class Flip(Task):
         object_rotation = np.zeros(3)
         return object_position, object_rotation
 
+    def _sample_n_objects(self, n) -> Tuple[np.ndarray, np.ndarray]:
+        """Randomize start position of object."""
+        object_position = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, len(self.obj_range_high)))
+        object_position[:, -1] = self.object_size / 2
+        object_rotation = np.zeros(3)
+        return object_position, object_rotation
+
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:
         d = angle_distance(achieved_goal, desired_goal)
         return np.array(d < self.distance_threshold, dtype=np.bool8)

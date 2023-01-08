@@ -106,6 +106,12 @@ class Slide(Task):
         object_position += noise
         return object_position
 
+    def _sample_n_objects(self, n) -> np.ndarray:
+        """Randomize start position of object."""
+        object_position = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, len(self.obj_range_high)))
+        object_position[:, -1] = self.object_size / 2
+        return object_position
+
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:
         d = distance(achieved_goal, desired_goal)
         return np.array(d < self.distance_threshold, dtype=np.bool8)
