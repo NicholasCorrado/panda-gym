@@ -93,8 +93,8 @@ class PickAndPlace(Task):
         goal = np.array([0.0, 0.0, self.object_size / 2])  # z offset for the cube center
         goal = np.tile(goal, (n, 1))
         noise = self.np_random.uniform(self.goal_range_low, self.goal_range_high, (n,3))
-        if self.np_random.random() < 0.3:
-            noise[:, 2] = 0.0
+        mask = self.np_random.random() < 0.3
+        noise[mask, 2] = 0.0
         goal += noise
         return goal
 
