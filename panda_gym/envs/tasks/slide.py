@@ -111,7 +111,7 @@ class Slide(Task):
 
     def _sample_n_objects(self, n) -> np.ndarray:
         """Randomize start position of object."""
-        object_position = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, len(self.obj_range_high)))
+        object_position = self.np_random.uniform(self.table_range_low, self.table_range_high, (n, 3))
         object_position[:, -1] = self.object_size / 2
         return object_position
 
