@@ -25,7 +25,7 @@ class Slide(Task):
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
         self.table_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
-        self.table_range_high = np.array([obj_xy_range / 2 + goal_x_offset, obj_xy_range / 2 + goal_x_offset, 0])
+        self.table_range_high = np.array([obj_xy_range / 2 + goal_x_offset, obj_xy_range / 2, 0])
 
         with self.sim.no_rendering():
             self._create_scene()
