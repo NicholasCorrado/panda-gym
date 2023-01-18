@@ -24,6 +24,9 @@ class Slide(Task):
         self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
+        self.table_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
+        self.table_range_high = np.array([obj_xy_range / 2 + goal_x_offset, obj_xy_range / 2 + goal_x_offset, 0])
+
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
@@ -95,14 +98,14 @@ class Slide(Task):
         """Randomize goal."""
         goal = np.array([0.0, 0.0, self.object_size / 2])  # z offset for the cube center
         goal = np.tile(goal, (n, 1))
-        noise = self.np_random.uniform(self.goal_range_low, self.goal_range_high, (n,3))
+        noise = self.np_random.uniform(self.table_range_low, self.table_range_high, (n,3)) # extends goal region to entire table!
         goal += noise
         return goal
 
     def _sample_object(self) -> np.ndarray:
         """Randomize start position of object."""
         object_position = np.array([0.0, 0.0, self.object_size / 2])
-        noise = self.np_random.uniform(self.obj_range_low, self.obj_range_high)
+        noise = self.np_random.uniform(self.table_range_low, self.table_range_high)
         object_position += noise
         return object_position
 
