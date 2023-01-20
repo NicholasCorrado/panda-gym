@@ -23,6 +23,8 @@ class Slide(Task):
         self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
+        self.table_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
+        self.table_range_high = np.array([obj_xy_range / 2 + goal_x_offset, obj_xy_range / 2, 0])
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
@@ -107,7 +109,7 @@ class Slide(Task):
 
     def _sample_n_objects(self, n) -> np.ndarray:
         """Randomize start position of object."""
-        object_position = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, 3))
+        object_position = self.np_random.uniform(self.table_range_low, self.table_range_high, (n, 3))
         object_position[:, -1] = self.object_size / 2
         return object_position
 
