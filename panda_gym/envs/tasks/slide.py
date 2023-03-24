@@ -14,13 +14,18 @@ class Slide(Task):
         goal_xy_range=0.3,
         goal_x_offset=0.4,
         obj_xy_range=0.3,
+        fixed_goal=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
         self.distance_threshold = distance_threshold
         self.object_size = 0.06
-        self.goal_range_low = np.array([-goal_xy_range / 2 + goal_x_offset, -goal_xy_range / 2, 0])
-        self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
+        if fixed_goal:
+            self.goal_range_low = np.array([goal_xy_range / 2 + goal_x_offset, 0, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, 0, 0])
+        else:
+            self.goal_range_low = np.array([-goal_xy_range / 2 + goal_x_offset, -goal_xy_range / 2, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
         self.table_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])

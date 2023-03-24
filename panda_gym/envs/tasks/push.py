@@ -14,13 +14,18 @@ class Push(Task):
         distance_threshold=0.05,
         goal_xy_range=0.3,
         obj_xy_range=0.3,
+        fixed_goal=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
         self.distance_threshold = distance_threshold
         self.object_size = 0.04
-        self.goal_range_low = np.array([-goal_xy_range / 2, -goal_xy_range / 2, 0])
-        self.goal_range_high = np.array([goal_xy_range / 2, goal_xy_range / 2, 0])
+        if fixed_goal:
+            self.goal_range_low = np.array([0, 0, 0])
+            self.goal_range_high = np.array([0, 0, 0])
+        else:
+            self.goal_range_low = np.array([-goal_xy_range / 2, -goal_xy_range / 2, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2, goal_xy_range / 2, 0])
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
         with self.sim.no_rendering():
@@ -105,8 +110,10 @@ class Push(Task):
 
     def _sample_n_objects(self, n) -> np.ndarray:
         """Randomize start position of object."""
-        object_position = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, len(self.obj_range_high)))
-        object_position[:, -1] = self.object_size / 2
+        object_position = np.array([0.0, 0.0, self.object_size / 2])
+        object_position = np.tile(object_position, (n, 1))
+        noise = self.np_random.uniform(self.obj_range_low, self.obj_range_high, (n, 3))
+        object_position += noise
         return object_position
 
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:

@@ -15,6 +15,7 @@ class Flip(Task):
         reward_type: str = "sparse",
         distance_threshold: float = 0.2,
         obj_xy_range: float = 0.3,
+        fixed_goal=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
@@ -34,6 +35,8 @@ class Flip(Task):
         self.achieved_mask[11:14+1] = True
         self.goal_mask[-4:] = True
         self.obj_mask[7:19+1] = True
+
+        self.fixed_goal = fixed_goal
 
 
     def _create_scene(self) -> None:
@@ -79,7 +82,10 @@ class Flip(Task):
 
     def _sample_goal(self) -> np.ndarray:
         """Randomize goal."""
-        goal = R.random().as_quat()
+        if self.fixed_goal:
+            goal = np.array([np.sqrt(2)/2, np.sqrt(2), 0, 1])
+        else:
+            goal = R.random().as_quat()
         return goal
 
     def _sample_n_goals(self, n) -> np.ndarray:

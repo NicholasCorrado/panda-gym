@@ -21,10 +21,10 @@ class PandaFlipEnv(RobotTaskEnv):
             Defaults to "ee".
     """
 
-    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee") -> None:
+    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=False, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = Flip(sim, reward_type=reward_type)
+        task = Flip(sim, reward_type=reward_type, fixed_goal=fixed_goal)
         super().__init__(robot, task)
 
 
@@ -38,10 +38,10 @@ class PandaPickAndPlaceEnv(RobotTaskEnv):
             Defaults to "ee".
     """
 
-    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee") -> None:
+    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=False, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = PickAndPlace(sim, reward_type=reward_type)
+        task = PickAndPlace(sim, reward_type=reward_type, fixed_goal=fixed_goal)
         super().__init__(robot, task)
 
 
@@ -55,10 +55,10 @@ class PandaPushEnv(RobotTaskEnv):
             Defaults to "ee".
     """
 
-    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee") -> None:
+    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=True, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = Push(sim, reward_type=reward_type)
+        task = Push(sim, reward_type=reward_type, fixed_goal=fixed_goal)
         super().__init__(robot, task)
 
 
@@ -72,10 +72,10 @@ class PandaReachEnv(RobotTaskEnv):
             Defaults to "ee".
     """
 
-    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee") -> None:
+    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=True, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = Reach(sim, reward_type=reward_type, get_ee_position=robot.get_ee_position)
+        task = Reach(sim, reward_type=reward_type, fixed_goal=fixed_goal, get_ee_position=robot.get_ee_position)
         super().__init__(robot, task)
 
 
@@ -89,10 +89,10 @@ class PandaSlideEnv(RobotTaskEnv):
             Defaults to "ee".
     """
 
-    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee") -> None:
+    def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=True, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = Slide(sim, reward_type=reward_type)
+        task = Slide(sim, reward_type=reward_type, fixed_goal=fixed_goal)
         super().__init__(robot, task)
 
 
