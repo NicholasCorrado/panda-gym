@@ -15,6 +15,7 @@ class Slide(Task):
         goal_x_offset=0.4,
         obj_xy_range=0.3,
         fixed_goal=False,
+        quadrant=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
@@ -23,6 +24,9 @@ class Slide(Task):
         if fixed_goal:
             self.goal_range_low = np.array([goal_xy_range / 2 + goal_x_offset, 0, 0])
             self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, 0, 0])
+        elif quadrant:
+            self.goal_range_low = np.array([goal_x_offset, 0, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
         else:
             self.goal_range_low = np.array([-goal_xy_range / 2 + goal_x_offset, -goal_xy_range / 2, 0])
             self.goal_range_high = np.array([goal_xy_range / 2 + goal_x_offset, goal_xy_range / 2, 0])
