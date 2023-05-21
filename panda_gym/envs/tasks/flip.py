@@ -87,9 +87,7 @@ class Flip(Task):
 
     def _sample_goal(self) -> np.ndarray:
         """Randomize goal."""
-        if self.fixed_goal:
-            goal = np.array([np.sqrt(2)/2, np.sqrt(2)/2, 0, 1])
-        elif self.quadrant:
+        if self.quadrant:
             theta = np.random.uniform(-np.pi, np.pi)
             m = np.array([
                 [1, 0, 0],
