@@ -24,7 +24,7 @@ class PandaFlipEnv(RobotTaskEnv):
     def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False, quadrant=False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=False, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = Flip(sim, reward_type=reward_type, fixed_goal=fixed_goal)
+        task = Flip(sim, reward_type=reward_type, fixed_goal=fixed_goal, quadrant=quadrant)
         super().__init__(robot, task)
 
 
@@ -41,7 +41,7 @@ class PandaPickAndPlaceEnv(RobotTaskEnv):
     def __init__(self, render: bool = False, reward_type: str = "sparse", control_type: str = "ee", fixed_goal: bool = False, quadrant=False) -> None:
         sim = PyBullet(render=render)
         robot = Panda(sim, block_gripper=False, base_position=np.array([-0.6, 0.0, 0.0]), control_type=control_type)
-        task = PickAndPlace(sim, reward_type=reward_type, fixed_goal=fixed_goal)
+        task = PickAndPlace(sim, reward_type=reward_type, fixed_goal=fixed_goal, quadrant=quadrant)
         super().__init__(robot, task)
 
 

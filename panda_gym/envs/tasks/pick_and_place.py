@@ -16,13 +16,22 @@ class PickAndPlace(Task):
         goal_xy_range: float = 0.3,
         goal_z_range: float = 0.2,
         obj_xy_range: float = 0.3,
+        fixed_goal=False,
+        quadrant=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
         self.distance_threshold = distance_threshold
         self.object_size = 0.04
-        self.goal_range_low = np.array([-goal_xy_range / 2, -goal_xy_range / 2, 0])
-        self.goal_range_high = np.array([goal_xy_range / 2, goal_xy_range / 2, goal_z_range])
+        if fixed_goal:
+            self.goal_range_low = np.array([0, 0, .2])
+            self.goal_range_high = np.array([0, 0, .2])
+        elif quadrant:
+            self.goal_range_low = np.array([0, 0, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2, goal_xy_range / 2, 0])
+        else:
+            self.goal_range_low = np.array([-goal_xy_range / 2, -goal_xy_range / 2, 0])
+            self.goal_range_high = np.array([goal_xy_range / 2, goal_xy_range / 2, goal_z_range])
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
         with self.sim.no_rendering():
