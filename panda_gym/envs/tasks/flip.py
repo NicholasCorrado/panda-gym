@@ -16,6 +16,7 @@ class Flip(Task):
         distance_threshold: float = 0.2,
         obj_xy_range: float = 0.3,
         fixed_goal=False,
+        quadrant=False,
     ) -> None:
         super().__init__(sim)
         self.reward_type = reward_type
@@ -23,6 +24,9 @@ class Flip(Task):
         self.object_size = 0.04
         self.obj_range_low = np.array([-obj_xy_range / 2, -obj_xy_range / 2, 0])
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
+        if fixed_goal:
+            self.goal_range_low = np.array([0, 0, 0])
+            self.goal_range_high = np.array([0, 0, 0])
         with self.sim.no_rendering():
             self._create_scene()
             self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
@@ -37,6 +41,7 @@ class Flip(Task):
         self.obj_mask[7:19+1] = True
 
         self.fixed_goal = fixed_goal
+        self.quadrant = quadrant
 
 
     def _create_scene(self) -> None:
@@ -83,7 +88,15 @@ class Flip(Task):
     def _sample_goal(self) -> np.ndarray:
         """Randomize goal."""
         if self.fixed_goal:
-            goal = np.array([np.sqrt(2)/2, np.sqrt(2), 0, 1])
+            goal = np.array([np.sqrt(2)/2, np.sqrt(2)/2, 0, 1])
+        elif self.quadrant:
+            theta = np.random.uniform(-np.pi, np.pi)
+            m = np.array([
+                [1, 0, 0],
+                [0, np.cos(theta), -np.sin(theta)],
+                [0, np.sin(theta), np.cos(theta)]
+            ])
+            goal = R.from_matrix(m).as_quat()
         else:
             goal = R.random().as_quat()
         return goal
